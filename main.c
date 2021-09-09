@@ -7,13 +7,13 @@
 #define PI 3.1415926535
 int main(int argc, char *argv[]){
     if(argc != 2){
-	fprintf(stderr, "Error: Usage - ./Monte [output_file_name]");
+	fprintf(stderr, "Error: Usage - ./buffon [output_file_name]\n");
 	return(1);
     }
 
     FILE* fp = fopen(argv[1],"w");
     if(fp == NULL){
-        fprintf(stderr, "Error: The file pointer is NULL");
+        fprintf(stderr, "Error: The file pointer is NULL\n");
 	return(1);
     }
     double l =0;

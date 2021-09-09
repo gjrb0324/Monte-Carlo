@@ -32,4 +32,4 @@ but still I can't solve how to compute without defined PI value
 
 Usage
 --------------------
-**./Monte [output file name here]**
+**./buffon [output file name here]**
