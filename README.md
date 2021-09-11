@@ -40,8 +40,7 @@ The things updated:
 
 Usage
 --------------------
-**./buffon [output file name here]**
-
-make buffon (to compile program)
-make clear (to clear present compiled program)
-make clear\_output (to clear output files)
+- **./buffon [output file name here]**
+- make buffon (to compile program)
+- make clear (to clear present compiled program)
+- make clear\_output (to clear output files)
