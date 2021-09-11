@@ -30,6 +30,18 @@ The things updated:
 
 but still I can't solve how to compute without defined PI value
 
+Version 1.0.3 2021.09.11
+----------------------
+The things updated:
+
+- Now It does 100 (experiments and compute PI value) each run.
+- make Makefile
+- make stat.c file to compute mean and standard deviation of the result of repeated trails
+
 Usage
 --------------------
 **./buffon [output file name here]**
+
+make buffon (to compile program)
+make clear (to clear present compiled program)
+make clear\_output (to clear output files)
