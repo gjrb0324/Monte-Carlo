@@ -10,7 +10,6 @@
 typedef struct needle{
     double length;
     double angle;
-    double x;
     double y;
 } needle;
 

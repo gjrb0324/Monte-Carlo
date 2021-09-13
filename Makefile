@@ -1,10 +1,16 @@
 CC = gcc
-CFLAGS = -g -Wall -std=c99 -mavx -mfma -fopenmp -pthread
+CFLAGS = -g -Wall -std=c99 -fopenmp -pthread
 LDFLAGS = -fopenmp
 
-buffon:
+buffon: main.o stat.o
 	rm -f buffon
-	$(CC) $(CFLAGS) main.c stat.c -o buffon $(LDFLAGS) -lm
+	$(CC) $(CFLAGS) main.o stat.o -o buffon $(LDFLAGS) -lm
+
+main.o: needle.h main.c
+	gcc -c -o main.o main.c
+
+stat.o: needle.h stat.c
+	gcc -c -o stat.o stat.c -mavx -mfma
 
 clear:
 	rm -f *.o
