@@ -38,6 +38,14 @@ The things updated:
 - make Makefile
 - make stat.c file to compute mean and standard deviation of the result of repeated trails
 
+Verseion 1.0.4 2021.09.15
+--------------------------
+The things updated:
+
+- throwing needle becomes module throw.c
+- change Makefile
+- now the program receive l and d value, and writes csv file that contains computed pi values when n increases 10 to 1000000
+
 Usage
 --------------------
 - **./buffon [output file name here]**
