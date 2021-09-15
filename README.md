@@ -45,6 +45,7 @@ The things updated:
 - throwing needle becomes module throw.c
 - change Makefile
 - now the program receive l and d value, and writes csv file that contains computed pi values when n increases 10 to 1000000
+- add R file to compute linear regression
 
 Usage
 --------------------
