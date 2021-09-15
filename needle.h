@@ -13,6 +13,7 @@ typedef struct needle{
     double y;
 } needle;
 
+extern double nd_throw(double d, double l, unsigned int n);
 extern double mean(double *pi_list, int size); //Compute mean of the list
 extern double sd(double *pi_list, double avg, int size); //Compute standard deviation of the list
 #endif
