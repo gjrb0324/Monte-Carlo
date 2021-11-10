@@ -1,20 +1,20 @@
 CC=gcc
 CFLAGS=-g -Wall -std=c99 -fopenmp -pthread
-LDFLAGS = -fopenmp
+LDFLAGS=-fopenmp
 
-proj2: main.o stat.o throw.o
-	rm -f proj2
-	$(CC) $(CFLAGS) main.o stat.o throw.o -o proj2 $(LDFLAGS) -lm
+proj2: src/main.o src/stat.o src/throw.o
+	rm -f proj2.out
+	$(CC) $(CFLAGS) src/main.o src/stat.o src/throw.o -o proj2.out $(LDFLAGS) -lm
 
-main.o: throw.h main.c
-	gcc -c -o main.o main.c
-throw.o : throw.h throw.c
-	gcc -c -o throw.o throw.c -fopenmp -pthread
-stat.o : throw.h stat.c
-	gcc -c -o stat.o stat.c -mavx -mfma
+main.o: src/throw.h src/main.c
+	gcc -g -c -o src/main.o src/main.c
+throw.o : src/throw.h src/throw.c
+	gcc -g -c -o src/throw.o src/throw.c -fopenmp -pthread
+stat.o : src/throw.h src/stat.c
+	gcc -g -c -o src/stat.o src/stat.c -mavx -mfma
 
 clear:
 	rm -f *.o 
-	rm -f proj2
+	rm -f proj2.out
 
 
