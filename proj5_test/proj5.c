@@ -54,7 +54,7 @@ double etot(char* lattice, unsigned int n, char ferro, double h){
 	}
 	transpose(lattice, n);
 
-	result=  energy - (h/( (-1) * ferro ) * magnet) ;
+	result=  (-1) * ferro * energy - h * magnet ;
 	return result;
 }
 
@@ -64,11 +64,16 @@ char matro(double e_diff,double T){
 	if(e_diff <= 0){
 		return 1;
 	}
-	double val = exp( (-1) * e_diff/T);
-	srand(time(NULL));
-	double r = (double)(rand()%10000)/10000;
-	//printf("e_diff: %lf, val: %lf, r: %lf\n", e_diff, val, r);
-	if (val >r){
+
+    double val = exp( (-1) * e_diff/T);
+    unsigned char fcount=0;
+    double r=0; //random number
+    do{
+        srand(time(NULL));
+        r = (double)(rand()%10000)/10000;
+        fcount++;
+	}while( val <r  && fcount <11);
+    if (val >r){
 		return 1;
 	}
 	else

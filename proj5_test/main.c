@@ -60,22 +60,16 @@ int main(){
 	p_lattice(lattice2,n);
 	lat1->lattice = lattice1;
 	lat2->lattice = lattice2;
-	
-	unsigned int index_arr[n*n];
-	for(unsigned int i =0; i<(n*n); i++)
-		index_arr[i] = i;
-	unsigned int size = n*n;
-	while(size >0){
+	int trial=1;
+	for(trial;trial < 10000001; trial++){
 
 		unsigned int x;
 		unsigned int y;
 
 		srand(time(NULL));
-		pos = index_arr[rand()%size];
+		pos = rand()%(n*n);
 		x = pos/n;
 		y = pos%n;
-		resize_arr(index_arr, size, pos, n*n);
-		size = size -1;
 		//lattice 1 for before flip, 2 for flip.
 		lat2->lattice[pos] = (-1) * lat2->lattice[pos];
 
@@ -84,7 +78,6 @@ int main(){
 		//printf("%lf, %lf\n", lat1->t_energy, lat2->t_energy);
 
 		double e_diff = lat2->t_energy - lat1->t_energy;
-		
 		//flip success
 		if(matro(e_diff,T) == 1){
 
@@ -96,10 +89,17 @@ int main(){
 			cpy_lattice(lat2->lattice, lat1->lattice, n);
 			}
 		else{
-			printf("Flip Failed : e_diff = %lf, x = %d, y = %d\n ", e_diff,x,y);
             cpy_lattice(lat1->lattice, lat2->lattice, n);
 		}
 	}
+    free(lattice1);
+    free(lattice2);
+    free(lat1);
+    free(lat2);
+    lattice1=NULL;
+    lattice2=NULL;
+    lat1=NULL;
+    lat2=NULL;
 	return 0;
 		
 	
