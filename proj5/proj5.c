@@ -1,10 +1,11 @@
 #include "proj5.h"
 
-double etot(char* lattice, unsigned int n, char ferro, double h){
+double etot(struct lat *lat_struct, unsigned int n, char ferro, double h){
 	int magnet = 0;
 	int energy = 0;
 	int pos = 0;
 	double result;
+    char *lattice = lat_struct->lattice;
 
 	//Find M
 	for (unsigned int  i=0; i<n; i++){
@@ -14,6 +15,7 @@ double etot(char* lattice, unsigned int n, char ferro, double h){
 
 		}
 	}
+    lat_struct->magnet = magnet;
 	//Find E
 	//Horizontal part energy
 	for (unsigned int i=0; i<n; i++){
@@ -53,15 +55,15 @@ double etot(char* lattice, unsigned int n, char ferro, double h){
 		}
 	}
 	transpose(lattice, n);
-
-	result=  energy - (h/( (-1) * ferro ) * magnet) ;
+    lat_struct->energy = energy;
+	result=  (-1)* ferro * energy - h * magnet ;
 	return result;
 }
 
 char matro(double e_diff,double T){
 	//1 for true(flip)
 	//0 for don't flip
-	if(e_diff <= 0){
+	if(e_diff < 0){
 		return 1;
 	}
 	double val = exp( (-1) * e_diff/T);
@@ -73,6 +75,21 @@ char matro(double e_diff,double T){
 	}
 	else
 		return 0;
+}
+
+void init_lattice(char *lattice, unsigned int n){
+    srand(time(NULL));
+    unsigned int pos = 0;
+    for(unsigned int i = 0 ; i < n; i++){
+        for(unsigned int j =0 ; j < n; j++){
+            pos = i*n+j;
+            int val =  (rand()%2);
+            if (val == 1)
+                lattice[pos] = 1;
+            else if(val == 0)
+                lattice[pos] = -1;
+            }
+    }
 }
 
 //copy lattice 1's data to lattice 2
@@ -106,7 +123,7 @@ void p_lattice(char *lattice, unsigned int n){
 			}
 		}
 	}
-	fflush(stdin);
+	//fflush(stdin);
 }
 
 void transpose(char *lattice, unsigned int n){

@@ -1,10 +1,10 @@
 #include "proj5.h"
-
+#include <unistd.h>
 int main(){
 
 	char ferro;
 	printf("Ferro? or antiFerro? Anser 0(ferro) or 1(antiferro) : ");
-	scanf("%hhd",&ferro);
+ferro =0;//	scanf("%hhd",&ferro);
 	printf("\n");
 	
 	if( ferro == 0)
@@ -16,17 +16,24 @@ int main(){
 		exit(1);
 	}
 
-	double T, h;
-	printf("Give values for T and h : ");
-	scanf("%lf %lf", &T, &h);
+	double h;
+	printf("Give values for h : ");
+h=1;//	scanf("%lf", &h);
 	printf("\n");
 
-	struct lat *lat1 =  (struct lat *)malloc(sizeof(int)+sizeof(char *)+sizeof(double));
-	struct lat *lat2 = (struct lat *)malloc(sizeof(int) + sizeof(char *) + sizeof(double));
+    unsigned int loop;
+    printf("How many times loop? : ");
+loop=1000000;//    scanf("%u", &loop);
+    printf("\n");
+
+    double t = TMAX;
+    double dt = 0.1;
+	struct lat *lat1 =  (struct lat *)malloc(sizeof(struct lat));
+	struct lat *lat2 = (struct lat *)malloc(sizeof(struct lat));
 
 	printf("Type length of the n*n lattice, n : ");
 	unsigned int n;
-	scanf("%u",&n);
+n = 6;//	scanf("%u",&n);
 	printf("\n");
 
 	lat1->size=n;
@@ -35,70 +42,45 @@ int main(){
 	char *lattice1 = (char *)malloc(n*n*sizeof(char));
 	char *lattice2 = (char *)malloc(n*n*sizeof(char));	
 
-	unsigned int pos=0;
 	//Starting with all
-	char init;
-	if(ferro== 1){
-		printf("Type initial spin 1 or -1 : ");
-		scanf("%hhd",&init);
-		printf("\n");
-	}
-
-	for(unsigned int i=0;i<n;i++){
-		for(unsigned int j=0;j<n;j++){
-			pos=n*i+j;
-			if(ferro == 1){
-				lattice1[pos] = init;
-				lattice2[pos] = init;
-			}
-			else if(ferro == -1){
-				lattice1[pos] = pow((-1),pos);
-				lattice2[pos] = pow((-1),pos);	
-			}	
-		}
-	}
-	p_lattice(lattice2,n);
+	init_lattice(lattice1, n);
+    cpy_lattice(lattice1, lattice2, n);
+    p_lattice(lattice2,n);
 	lat1->lattice = lattice1;
 	lat2->lattice = lattice2;
 	
-	unsigned int index_arr[n*n];
-	for(unsigned int i =0; i<(n*n); i++)
-		index_arr[i] = i;
-	unsigned int size = n*n;
-	while(size >0){
+	while(t >= TMIN){
 
-		unsigned int x;
-		unsigned int y;
+        for(unsigned int i = 0; i< loop; i++){
+            unsigned int x;
+            unsigned int y;
+            srand(time(NULL));
+            unsigned int pos = rand()%(n*n);
+            x = pos/n;
+            y = pos%n;
+            //lattice 1 for before flip, 2 for flip.
+            lat2->lattice[pos] *= -1;
 
-		srand(time(NULL));
-		pos = index_arr[rand()%size];
-		x = pos/n;
-		y = pos%n;
-		resize_arr(index_arr, size, pos, n*n);
-		size = size -1;
-		//lattice 1 for before flip, 2 for flip.
-		lat2->lattice[pos] = (-1) * lat2->lattice[pos];
+            lat1->hamiltonian = etot(lat1, n, ferro, h);
+            lat2->hamiltonian = etot(lat2, n, ferro, h);
+            //printf("%lf, %lf\n", lat1->t_energy, lat2->t_energy);
 
-		lat1->t_energy = etot(lattice1, n, ferro, h);
-		lat2->t_energy = etot(lattice2, n, ferro, h);
-		//printf("%lf, %lf\n", lat1->t_energy, lat2->t_energy);
-
-		double e_diff = lat2->t_energy - lat1->t_energy;
-		
-		//flip success
-		if(matro(e_diff,T) == 1){
-
-			printf("--------------------------------------\n");
-			printf("Flip Success : x = %d, y= %d\n", x, y);
-			printf("Energy now : %lf\n", lat2->t_energy);
-			p_lattice(lat2->lattice, lat2->size);
-			printf("\n");
-			cpy_lattice(lat2->lattice, lat1->lattice, n);
-			}
-		else{
-			printf("Flip Failed : e_diff = %lf, x = %d, y = %d\n ", e_diff,x,y);
-            cpy_lattice(lat1->lattice, lat2->lattice, n);
-		}
+            double e_diff = lat2->hamiltonian - lat1->hamiltonian;
+            
+            //flip success
+            if(matro(e_diff,t) == 1){
+                cpy_lattice(lat2->lattice, lat1->lattice, n);
+                }
+            else{
+                cpy_lattice(lat1->lattice, lat2->lattice, n);
+            }
+        }
+        t -= dt;
+        printf("-----------------Temp = %lf----------------\n", t);
+        p_lattice(lat2->lattice, lat2->size);
+        printf("Energy now : %lf\n", lat2->energy);
+        printf("Magnetisation now : %lf\n", lat2->magnet);
+        printf("\n");
 	}
 	return 0;
 		
