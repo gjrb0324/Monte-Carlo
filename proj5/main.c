@@ -1,12 +1,14 @@
 #include "proj5.h"
 #include <unistd.h>
-int main(){
+int main(int argc, char** argv){
 
 	char ferro;
 	printf("Ferro? or antiFerro? Anser 0(ferro) or 1(antiferro) : ");
-ferro =0;//	scanf("%hhd",&ferro);
+	scanf("%hhd",&ferro);
 	printf("\n");
-	
+	FILE *fp;
+    fp = fopen(argv[1], "w");
+    fprintf(fp, "T,E,M\n");
 	if( ferro == 0)
 		ferro = 1;
 	else if (ferro == 1)
@@ -18,12 +20,12 @@ ferro =0;//	scanf("%hhd",&ferro);
 
 	double h;
 	printf("Give values for h : ");
-h=1;//	scanf("%lf", &h);
+    scanf("%lf", &h);
 	printf("\n");
 
     unsigned int loop;
     printf("How many times loop? : ");
-loop=1000000;//    scanf("%u", &loop);
+    scanf("%u", &loop);
     printf("\n");
 
     double t = TMAX;
@@ -33,7 +35,7 @@ loop=1000000;//    scanf("%u", &loop);
 
 	printf("Type length of the n*n lattice, n : ");
 	unsigned int n;
-n = 6;//	scanf("%u",&n);
+    scanf("%u",&n);
 	printf("\n");
 
 	lat1->size=n;
@@ -80,8 +82,10 @@ n = 6;//	scanf("%u",&n);
         p_lattice(lat2->lattice, lat2->size);
         printf("Energy now : %lf\n", lat2->energy);
         printf("Magnetisation now : %lf\n", lat2->magnet);
+        fprintf(fp, "%lf,%lf,%lf\n",t,lat2->energy,lat2->magnet);
         printf("\n");
 	}
+    fclose(fp);
 	return 0;
 		
 	
