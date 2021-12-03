@@ -1,21 +1,24 @@
-#include "proj5.h"
+#include "proj6.h"
 
-double etot(char* lattice, unsigned int n, char ferro, double h){
-	int magnet = 0;
-	int energy = 0;
-	int pos = 0;
-	double result;
-
+double magnet(char* lattice, unsigned int n){
 	//Find M
+    double result;
+    unsigned int pos = 0;
 	for (unsigned int  i=0; i<n; i++){
 		for(unsigned int j=0;j<n ; j++){
 			pos = (i*n+j); 
-			magnet+=lattice[pos];
+			result+=lattice[pos];
 
 		}
 	}
+    return result;
+}
+
+double energy(char* lattice, unsigned int n){
 	//Find E
 	//Horizontal part energy
+    double result;
+    unsigned int pos =0;
 	for (unsigned int i=0; i<n; i++){
 		for(unsigned int j=0; j<n ; j++){
 			
@@ -23,13 +26,13 @@ double etot(char* lattice, unsigned int n, char ferro, double h){
 			
 			//if  i ==1 or i== (m-1) expand lattice
 			if(j == 0){
-				energy+=( lattice[pos] * (*(lattice+i*n+n-1)) );
-				energy+=( lattice[pos] * lattice[pos+1] );
+				result+=( lattice[pos] * (*(lattice+i*n+n-1)) );
+				result+=( lattice[pos] * lattice[pos+1] );
 			}
 			else if( j == (n-1))
-				energy+=( lattice[pos] * (*(lattice+i*n)) );
+				result+=( lattice[pos] * (*(lattice+i*n)) );
 			else
-				energy+=( lattice[pos] * lattice[pos+1]);
+				result+=( lattice[pos] * lattice[pos+1]);
 		}
 	}
 	//transpose to decrease stride and increase hit rate
@@ -43,41 +46,59 @@ double etot(char* lattice, unsigned int n, char ferro, double h){
 			
 			//if  i ==1 or i== (m-1) expand lattice
 			if(j == 0){
-				energy+=( lattice[pos] * (*(lattice+i*n+n-1)) );
-				energy+=( lattice[pos] * lattice[pos+1]);
+				result+=( lattice[pos] * (*(lattice+i*n+n-1)) );
+				result+=( lattice[pos] * lattice[pos+1]);
 			}
 			else if( j == (n-1))
-				energy+=( lattice[pos] * (*(lattice+i*n)) );
+				result+=( lattice[pos] * (*(lattice+i*n)) );
 			else
-				energy+=( lattice[pos] * lattice[pos+1]);
+				result+=( lattice[pos] * lattice[pos+1]);
 		}
 	}
-	transpose(lattice, n);
-
-	result=  (-1) * ferro * energy - h * magnet ;
+    transpose(lattice,n);
+    return result;
+}
+double etot(struct lat *lat_struct, unsigned int n, char ferro, double h){
+	unsigned int pos = 0;
+	double result;
+    char *lattice = lat_struct->lattice;
+    lat_struct->magnet = magnet(lat_struct->lattice, n);
+    lat_struct->energy = energy(lat_struct->lattice, n);
+	result=  (-1)* ferro * lat_struct->energy - h * lat_struct->magnet ;
 	return result;
 }
+
 
 char matro(double e_diff,double T){
 	//1 for true(flip)
 	//0 for don't flip
-	if(e_diff <= 0){
+	if(e_diff < 0){
 		return 1;
 	}
-
-    double val = exp( (-1) * e_diff/T);
-    unsigned char fcount=0;
-    double r=0; //random number
-    do{
-        srand(time(NULL));
-        r = (double)(rand()%10000)/10000;
-        fcount++;
-	}while( val <r  && fcount <11);
-    if (val >r){
+	double val = exp( (-1) * e_diff/T);
+	srand(time(NULL));
+	double r = (double)(rand()%10000)/10000;
+	//printf("e_diff: %lf, val: %lf, r: %lf\n", e_diff, val, r);
+	if (val >r){
 		return 1;
 	}
 	else
 		return 0;
+}
+
+void init_lattice(char *lattice, unsigned int n){
+    srand(time(NULL));
+    unsigned int pos = 0;
+    for(unsigned int i = 0 ; i < n; i++){
+        for(unsigned int j =0 ; j < n; j++){
+            pos = i*n+j;
+            int val =  (rand()%2);
+            if (val == 1)
+                lattice[pos] = 1;
+            else if(val == 0)
+                lattice[pos] = -1;
+            }
+    }
 }
 
 //copy lattice 1's data to lattice 2
@@ -111,7 +132,7 @@ void p_lattice(char *lattice, unsigned int n){
 			}
 		}
 	}
-	fflush(stdin);
+	//fflush(stdin);
 }
 
 void transpose(char *lattice, unsigned int n){
@@ -145,3 +166,4 @@ void resize_arr(unsigned int *arr, size_t arr_size, unsigned int elem, unsigned 
 		else arr[arr_size-1] = 0;
 	}
 }
+
