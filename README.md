@@ -1,12 +1,19 @@
 Monte Carlo 2021, Gyu Huh, GIST
 
-proj1 - Buffon's needle experiment
-proj2 - Acceptance/Rejection Monte Carlo
-proj3 - Monte Carlo Integration
-proj4 - Variance Reduction (Conditional MC, Importance sampling...)
-        & MC Performance ( Laboriousness, Relatively efficiency)
-proj5 - Metropolis Algorithm
-proj6 - Wang-Landau Algorithm (FAILED)
-proj7 - Walk on circle ( Random Walk)
+__proj1__ - Buffon's needle experiment
+
+__proj2__ - Acceptance/Rejection Monte Carlo
+
+__proj3__ - Monte Carlo Integration
+
+__proj4__ - Variance Reduction (Conditional MC, Importance sampling...)
+
+            & MC Performance ( Laboriousness, Relatively efficiency)
+
+__proj5__ - Metropolis Algorithm
+
+__proj6__ - Wang-Landau Algorithm (FAILED)
+
+__proj7__ - Walk on circle ( Random Walk)
 
 
