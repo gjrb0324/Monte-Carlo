@@ -6,9 +6,7 @@ __proj2__ - Acceptance/Rejection Monte Carlo
 
 __proj3__ - Monte Carlo Integration
 
-__proj4__ - Variance Reduction (Conditional MC, Importance sampling...)
-
-            & MC Performance ( Laboriousness, Relatively efficiency)
+__proj4__ - Variance Reduction (Conditional MC, Importance sampling...)  & MC Performance ( Laboriousness, Relatively efficiency)
 
 __proj5__ - Metropolis Algorithm
 
